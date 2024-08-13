@@ -2,7 +2,7 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-              url: http://WEB_HOST:8080/
+              url: http://WEB_HOST:8080/web/
               host: localhost
               browser: chrome
               port: 4444
