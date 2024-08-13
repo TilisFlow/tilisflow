@@ -1,0 +1,12 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+              url: http://WEB_HOST:8080/frontend/web/
+              host: localhost
+              browser: chrome
+              port: 4444
+              restart: true
+              wait: 2
+        - Yii2:
+              part: init
