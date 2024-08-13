@@ -86,9 +86,6 @@ jobs:
       - name: Install dependencies
         run: composer install $DEFAULT_COMPOSER_FLAGS --ignore-platform-req=ext-http
 
-      - name: Init Yii2
-        run: php init --env=Development --overwrite=All
-
       - name: Run RBAC Migrations
         run: php yii_test migrate --migrationPath=@yii/rbac/migrations --interactive=0
 
