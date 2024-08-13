@@ -99,7 +99,7 @@ jobs:
         run: sed -i -e 's/WEB_HOST/'${{env.HOSTNAME_IP}}'/g' tests/acceptance.suite.yml && cat tests/acceptance.suite.yml
 
       - name: Configure test site
-        run: sed -i -e 's/$isTest=false/$isTest=true/g' index-test.php && cat index-test.php
+        run: sed -i -e 's/$isTest=false/$isTest=true/g' web/index-test.php && cat web/index-test.php
 
       - name: Build Codeception tests
         run: ./vendor/bin/codecept build
