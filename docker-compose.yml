@@ -1,0 +1,22 @@
+version: '2'
+services:
+  php:
+    image: yiisoftware/yii2-php:8.3-apache
+    volumes:
+      - ./:/app:delegated
+    ports:
+      - '8000:80'
+  mariadb:
+    image: mariadb:10.1
+    volumes:
+      - mariadb:/var/lib/mysql
+    environment:
+      TZ: "Europe/Berlin"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "root_password"
+      MYSQL_USER: 'tilisflow_user'
+      MYSQL_PASSWORD: 'tilisflow_password'
+      MYSQL_DATABASE: 'tilisflow'
+volumes:
+  mariadb:
+
