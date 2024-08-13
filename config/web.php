@@ -12,6 +12,10 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest'],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'G_uJNUPeJZxOpPbkFoIYqw_V02XyLLSG',
@@ -42,14 +46,24 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'login'=>'site/login'
             ],
         ],
-        */
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap5\BootstrapAsset' => [
+                    'css' => [],
+//                    'js' => [],
+                ],
+//                'yii\bootstrap5\BootstrapPluginAsset' => [
+//                    'js' => [],
+//                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];

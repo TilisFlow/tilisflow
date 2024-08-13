@@ -15,13 +15,13 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class AppAsset extends AssetBundle
+class LoginAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
         'lib/ninjabootstrap/bootstrap.min.css',
-        'css/site.css',
+        'lib/css/login.css',
     ];
     public $js = [
     ];
