@@ -114,5 +114,5 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-artifacts-${{ runner.php }}-${{ runner.os }}
+          name: test-artifacts-'${{ runner.php }}'-'${{ runner.os }}'
           path: tests/_output/
