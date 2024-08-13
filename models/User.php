@@ -2,38 +2,39 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use Yii;
+use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use yii\web\IdentityInterface;
+
+/**
+ * User model
+ *
+ * @property integer $id
+ * @property string $username
+ * @property string $password
+ * @property string $authKey
+ * @property integer $status
+ * @property string $accessToken
+ *  @property string $email
+ * @property string $createdAt
+ * @property string $createdFrom
+ * @property string $updatedAt
+ * @property string $updatedFrom
+ *
+ */
+class User extends ActiveRecord implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return User::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -54,17 +55,12 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * Finds user by username
      *
      * @param string $username
+     *
      * @return static|null
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return User::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -95,10 +91,25 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * Validates password
      *
      * @param string $password password to validate
+     *
      * @return bool if password provided is valid for current user
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return Yii::$app->security->validatePassword($password, $this->password);
+
+        return $this->password === Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(parent::attributeLabels(), [
+            'username' => 'Username',
+            'password' => 'Password',
+            'email' => 'E-Mail',
+        ]);
     }
 }

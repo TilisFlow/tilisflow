@@ -6,6 +6,18 @@ services:
       - ./:/app:delegated
     ports:
       - '8000:80'
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tilisflow-phpmyadmin
+    links:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: unless-stopped
+    ports:
+      - 8081:80
   mariadb:
     image: mariadb:10.1
     volumes:
