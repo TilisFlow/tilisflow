@@ -1,6 +1,9 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+    tags:
+      - "*"
 
 env:
   DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
@@ -114,5 +117,5 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-artifacts-'${{ matrix.php }}'-'${{ matrix.os }}'
+          name: test-artifacts_php-${{ matrix.php }}_${{ matrix.os }}
           path: tests/_output/

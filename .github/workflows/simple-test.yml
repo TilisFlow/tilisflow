@@ -1,0 +1,118 @@
+name: build
+
+on: [push, pull_request]
+
+env:
+  DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
+  PHPUNIT_EXCLUDE_GROUP: mssql,oci,wincache,xcache,zenddata,cubrid
+  XDEBUG_MODE: coverage, develop
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    services:
+      mysql:
+        image: mariadb:10.5.15
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: tilisflow
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      selenium:
+        image: selenium/standalone-chrome:3.141.59-mercury
+        ports:
+          - 4444:4444
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04]
+        php: [8.3]
+    env:
+      extensions: curl, dom, imagick, intl, mbstring, mcrypt, memcached, mysql, pdo, pdo_mysql, pdo_pgsql, pdo_sqlite, pgsql, sqlite
+      key: cache-v1
+
+    steps:
+      - name: Install Locales
+        run: sudo apt-get clean && sudo apt-get update && sudo apt-get install -y locales
+      - name: Generate german locale
+        run: sudo locale-gen de_DE.utf8
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+      #      - name: Cache extensions
+      #        uses: actions/cache@v2
+      #        with:
+      #          path: ${{ steps.extcache.outputs.dir }}
+      #          key: ${{ steps.extcache.outputs.key }}
+      #          restore-keys: ${{ steps.extcache.outputs.key }}
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pecl
+          extensions: ${{ env.extensions }}
+          ini-values: date.timezone='UTC', session.save_path="${{ runner.temp }}"
+
+      - name: Install Memcached
+        uses: niden/actions-memcached@v7
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install $DEFAULT_COMPOSER_FLAGS --ignore-platform-req=ext-http
+
+      - name: Run RBAC Migrations
+        run: php yii_test migrate --migrationPath=@yii/rbac/migrations --interactive=0
+
+      - name: Run Migrations
+        run: php yii_test migrate/up --interactive=0
+
+      - name: Get docker informations
+        run: echo ::set-env name=HOSTNAME_IP::$(ping -q -c 1 $HOSTNAME | grep PING | sed -e "s/).*//" | sed -e "s/.*(//")
+
+      - name: Configure Acceptance suite
+        run: sed -i -e 's/WEB_HOST/'${{env.HOSTNAME_IP}}'/g' tests/acceptance.suite.yml && cat tests/acceptance.suite.yml
+
+      - name: Configure test site
+        run: sed -i -e 's/$isTest=false/$isTest=true/g' web/index-test.php && cat web/index-test.php
+
+      - name: Build Codeception tests
+        run: ./vendor/bin/codecept build
+
+      - name: Run PHP
+        run: php -S 0.0.0.0:8080 -t . &>/dev/null&
+
+      - name: Run Codeception
+        run: ./vendor/bin/codecept run
+
+      - name: Upload artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts_php-${{ matrix.php }}_${{ matrix.os }}
+          path: tests/_output/
