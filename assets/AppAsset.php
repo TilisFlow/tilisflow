@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'lib/nucleo/css/icons.css',
         'lib/ninjabootstrap/bootstrap.min.css',
         'css/site.css',
     ];
