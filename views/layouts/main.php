@@ -23,59 +23,73 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?> | TilisFlow</title>
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
+<body class="h-100">
 <?php $this->beginBody() ?>
 
-<header id="header">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
-        ]
-    ]);
-    NavBar::end();
-    ?>
-</header>
 
-<main id="main" class="flex-shrink-0" role="main">
-    <div class="container">
-        <?php if (!empty($this->params['breadcrumbs'])): ?>
-            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-        <?php endif ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
-</main>
 
-<footer id="footer" class="mt-auto py-3 bg-light">
+<style>
+    #navbarStacked_1 .nav_underline_1 {
+        --bs-nav-link-color: rgba(var(--bs-body-color-rgb), .75);
+        --bs-nav-link-hover-color: var(--bs-body-color);
+        --bs-nav-link-disabled-color: rgba(var(--bs-body-color-rgb), .5);
+        --bs-nav-underline-border-width: 3px;
+        --bs-nav-underline-link-active-color: var(--bs-body-color);
+
+        /* Border of active color */
+        .nav-link.active {
+            border-color: var(--bs-primary);
+        }
+    }
+
+</style>
+<?= $this->render('_partials/navigation')?>
+
+<section class="py-4">
+
     <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+
+        <!-- Content -->
+        <div class="row h-75">
+            <div class="col-12">
+                <div class="lc-block mb-4">
+                    <div>
+                        <h1 class="fw-semibold ls-n2 fs-4"><?= $this->title ?></h1>
+                    </div>
+                </div>
+
+                <main id="main" class="flex-shrink-0" role="main">
+                    <div class="container">
+                        <?php if (!empty($this->params['breadcrumbs'])): ?>
+                            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+                        <?php endif ?>
+                        <?= Alert::widget() ?>
+                        <?= $content ?>
+                    </div>
+                </main>
+            </div>
         </div>
     </div>
-</footer>
+</section>
+
+<script>
+    window.addEventListener('load', function() {
+        // Bootstrap is loaded and available
+
+        // Initialize Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Initialize Bootstrap popovers
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+    });
+</script>
 
 <?php $this->endBody() ?>
 </body>
