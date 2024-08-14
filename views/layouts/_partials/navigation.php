@@ -5,7 +5,7 @@ use yii\helpers\Url; ?>
     <div class="container align-items-center">
 
         <a class="navbar-brand pb-lg-4" href="#">
-            <img src="<?= Url::to('@web/img/logo.png') ?>" width="32" height="32" class="img-fluid " alt="logo">
+            <img src="<?= Url::to('@web/img/logo.png') ?>" width="80" height="32" class="img-fluid " alt="logo">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarStacked_1" aria-controls="navbarStacked_1" aria-expanded="false" aria-label="Toggle navigation">
