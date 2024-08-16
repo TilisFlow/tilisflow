@@ -33,8 +33,7 @@ return [
             'defaultRoles' => ['guest'],
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'class' => 'app\models\User',
         ],
         'request' => [
             'cookieValidationKey' => 'test',
