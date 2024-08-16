@@ -29,6 +29,7 @@ return [
             'showScriptName' => true,
         ],
         'user' => [
+            'class' => 'app\models\User',
             'identityClass' => 'app\models\User',
         ],
         'request' => [
