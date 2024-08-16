@@ -20,7 +20,7 @@ class m240813_163757_base_user extends Migration
             'authKey'=>$this->string(255)->notNull(),
             'status'=>$this->integer(11)->notNull(),
             'accessToken'=>$this->string(255)->notNull(),
-            'email'=>$this->string(255)->notNull(),
+            'email'=>$this->string(255)->notNull()->defaultValue(''),
             'createdAt'=>$this->dateTime()->notNull(),
             'createdFrom'=>$this->integer(255)->notNull(),
             'updatedAt'=>$this->dateTime()->notNull(),
