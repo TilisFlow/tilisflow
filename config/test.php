@@ -28,6 +28,10 @@ return [
         'urlManager' => [
             'showScriptName' => true,
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest'],
+        ],
         'user' => [
             'class' => 'app\models\User',
             'identityClass' => 'app\models\User',
