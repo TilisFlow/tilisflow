@@ -44,7 +44,7 @@ use yii\helpers\Url; ?>
 
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="<?= Url::to(['site/logout']) ?>" data-method="post">Log Out</a></li>
+                        <li><a class="dropdown-item" href="<?= Url::to(['site/logout']) ?>" data-method="post">Logout</a></li>
                     </ul>
                 </div>
 
