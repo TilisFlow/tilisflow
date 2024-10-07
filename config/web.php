@@ -51,7 +51,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'login'=>'site/login'
+                'logout'=>'site/logout',
+                'login'=>'site/login',
+                'dashboard'=>'dashboard/index',
+                'project/<id:\w+>'=>'projects/view',
+                'projects'=>'projects/index',
             ],
         ],
         'assetManager' => [
@@ -65,6 +69,18 @@ $config = [
 //                ],
             ],
         ],
+        'i18n'=>[
+            'translations' => [
+                'app*' => [
+                    'class'=>'yii\i18n\PhpMessageSource',
+                    'filemap'=>[
+                        'app'=>'app.php',
+                        'app/error'=>'error.php',
+                    ],
+                    'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation']
+                ]
+            ]
+        ]
     ],
     'params' => $params,
 ];

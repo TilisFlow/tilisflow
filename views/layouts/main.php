@@ -48,30 +48,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </style>
 <?= $this->render('_partials/navigation')?>
 
-<section class="py-4">
-
-    <div class="container">
-
+<section>
         <!-- Content -->
         <div class="row h-75">
             <div class="col-12">
-                <div class="lc-block mb-4">
-                    <div>
-                        <h1 class="fw-semibold ls-n2 fs-4"><?= $this->title ?></h1>
-                    </div>
-                </div>
-
                 <main id="main" class="flex-shrink-0" role="main">
-                    <div class="container">
                         <?php if (!empty($this->params['breadcrumbs'])): ?>
                             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
                         <?php endif ?>
                         <?= Alert::widget() ?>
                         <?= $content ?>
-                    </div>
                 </main>
             </div>
-        </div>
     </div>
 </section>
 

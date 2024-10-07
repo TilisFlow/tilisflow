@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Url; ?>
-<nav class="navbar navbar-expand-lg my-lg-4 py-lg-0 border-bottom-lg">
+<nav class="navbar navbar-expand-lg mt-lg-4 py-lg-0 border-bottom-lg">
     <div class="container align-items-center">
 
         <a class="navbar-brand pb-lg-4" href="#">
@@ -20,7 +20,7 @@ use yii\helpers\Url; ?>
                     <a class="nav-link pb-lg-4" href="<?= Url::to(['dashboard/index']) ?>">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link pb-lg-4" href="#">Projects</a>
+                    <a class="nav-link pb-lg-4" href="<?= Url::to(['projects/index']) ?>">Projects</a>
                 </li>
             </ul>
 
@@ -34,6 +34,7 @@ use yii\helpers\Url; ?>
 
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="<?= Url::to(['users/index']) ?>">Users</a></li>
+                        <li><a class="dropdown-item" href="<?= Url::to(['settings/projects']) ?>">Projects</a></li>
                     </ul>
                 </div>
 
